@@ -1,0 +1,11 @@
+{
+    "compileOnSave" : true,
+    "include" : [
+        "./*.ts",
+        "../typings/index.d.ts",
+        "../ts-output/*.d.ts"
+    ],
+    "compilerOptions": {
+        "sourceMap": false
+    }
+}

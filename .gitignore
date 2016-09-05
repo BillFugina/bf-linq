@@ -1,6 +1,9 @@
-.baseDir.*
+*baseDir*
 /node_modules
 /.vscode
-/.baseDir.js
-/.baseDir.js.map
 /.tscache
+/ts-output
+/spec
+/typings
+/lib
+/tests/*.js

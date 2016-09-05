@@ -132,84 +132,9 @@ Array.prototype.sum = function (lambda) {
     }
     return sum;
 };
-Array.prototype.groupBy = function (lambda) {
-    var result = new Array();
-    for (var _i = 0, _a = this; _i < _a.length; _i++) {
-        var elem = _a[_i];
-        var key = lambda(elem);
-        var pair = result.where(function (pair) { return pair.key == key; })
-            .first();
-        if (!pair) {
-            var newPair = {
-                key: key,
-                array: [elem]
-            };
-            result.push(newPair);
-        }
-        else {
-            pair.array.push(elem);
-        }
-    }
-    return result;
-};
-(function () {
-    Array.prototype.groupBy = function (lambda) {
-        if (this.any()) {
-            var firstKeyType = typeof (lambda(this.first()));
-            if (firstKeyType == "string" || firstKeyType == "number") {
-                return groupByHash(this, lambda);
-            }
-        }
-        return groupBy(this, lambda);
-    };
-    function groupBy(array, lambda) {
-        var result = new Array();
-        for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
-            var elem = array_1[_i];
-            var key = lambda(elem);
-            var pair = result.where(function (pair) { return pair.key == key; })
-                .first();
-            if (!pair) {
-                var newPair = {
-                    key: key,
-                    array: [elem]
-                };
-                result.push(newPair);
-            }
-            else {
-                pair.array.push(elem);
-            }
-        }
-        return result;
-    }
-    function groupByHash(array, lambda) {
-        var hashTable = {};
-        for (var _i = 0, array_2 = array; _i < array_2.length; _i++) {
-            var elem = array_2[_i];
-            var key = lambda(elem);
-            var pair = hashTable[key];
-            if (!pair) {
-                var newPair = {
-                    key: key,
-                    array: [elem]
-                };
-                hashTable[key] = newPair;
-            }
-            else {
-                pair.array.push(elem);
-            }
-        }
-        var result = [];
-        for (var hash in hashTable) {
-            if (hashTable.hasOwnProperty(hash)) {
-                result.push(hashTable[hash]);
-            }
-        }
-        return result;
-    }
-    ;
-})();
 Array.prototype.singleJoin = function (otherArray, selfKeyLambda, otherKeyLambda, pairMap) {
+    //Generate list for looking up right elements by keys. This ensures that otherKeyLambda is only
+    //called only otherArray.length times at a slight memory cost
     var rightKeyMappings = new Array();
     for (var _i = 0, otherArray_1 = otherArray; _i < otherArray_1.length; _i++) {
         var rightElem = otherArray_1[_i];
@@ -218,6 +143,7 @@ Array.prototype.singleJoin = function (otherArray, selfKeyLambda, otherKeyLambda
             value: rightElem
         });
     }
+    //For each element of this, join with the first match in the other array
     var results = new Array();
     for (var _a = 0, _b = this; _a < _b.length; _a++) {
         var leftElem = _b[_a];
@@ -227,17 +153,6 @@ Array.prototype.singleJoin = function (otherArray, selfKeyLambda, otherKeyLambda
         results.push(result);
     }
     return results;
-};
-Array.prototype.groupJoin = function (otherArray, selfKeyLambda, otherKeyLambda) {
-    var rightGroups = otherArray.groupBy(otherKeyLambda);
-    var getGroupKey = function (group) { return group.key; };
-    var createGroupJoinResult = function (left, right) {
-        return {
-            key: left,
-            array: right.array
-        };
-    };
-    return this.singleJoin(rightGroups, selfKeyLambda, getGroupKey, createGroupJoinResult);
 };
 Array.prototype.last = function (lambda) {
     if (!lambda && this.length > 0) {
@@ -254,4 +169,3 @@ Array.prototype.last = function (lambda) {
     }
     return result;
 };
-//# sourceMappingURL=bf-linq.js.map

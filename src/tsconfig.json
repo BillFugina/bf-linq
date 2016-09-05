@@ -3,7 +3,11 @@
     "include" : [
         "./**/*.ts"
     ],
+    "exclude" : [
+        "./.baseDir.*"
+    ],
     "compilerOptions": {
-        "outDir": "../"
+        "declaration" : true,
+        "outDir": "../ts-output"
     }
 }

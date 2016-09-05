@@ -1,0 +1,6 @@
+.baseDir.*
+/node_modules
+/.vscode
+/.baseDir.js
+/.baseDir.js.map
+/.tscache
